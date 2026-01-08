@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>英语打字练习（30天 + 复习 + 星星奖励）</title>
+
+  <style>
+    body{
+      font-family: Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:#f3f4f6;
+      margin:0;
+      padding:22px 12px;
+      color:#111827;
+    }
+    .wrap{
+      max-width:1050px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:18px;
+      padding:18px 16px;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+    }
+    .top{
+      display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .title{font-weight:900;font-size:20px; line-height:1.2;}
+    .sub{
+      margin-top:6px; font-size:14px; color:#6b7280; font-weight:600;
+      display:inline-block; padding:6px 10px; border-radius:12px;
+      background:#f3f4f6; border:1px solid #e5e7eb;
+    }
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;
+    }
+    select,button{
+      padding:10px 12px; border-radius:12px; border:1px solid #d1d5db;
+      background:#fff; font-size:14px; cursor:pointer;
+    }
+    button.primary{background:#111827; color:#fff; border-color:#111827;}
+    button.warn{background:#b91c1c; color:#fff; border-color:#b91c1c;}
+    button:disabled{opacity:.55; cursor:not-allowed;}
+    .grid{
+      display:grid; grid-template-columns: 1.25fr .75fr; gap:14px;
+    }
+    @media(max-width:900px){ .grid{grid-template-columns:1fr;} }
+    .card{
+      background:#f9fafb; border:1px solid #e5e7eb; border-radius:18px; padding:16px;
+    }
+    .en{font-size:34px;font-weight:900;margin:0 0 6px 0;}
+    .cn{font-size:16px;color:#6b7280;margin:0 0 12px 0;}
+    .input{
+      width:100%; font-size:22px; padding:14px;
+      border-radius:14px; border:2px solid #e5e7eb; outline:none; box-sizing:border-box;
+    }
+    .input:focus{border-color:#111827;}
+    .hint{margin-top:10px;font-size:14px; line-height:1.6;}
+    .ok{color:#16a34a; font-weight:900;}
+    .bad{color:#dc2626; font-weight:900;}
+    .soft{color:#6b7280;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top:10px;}
+    .stats{display:flex; gap:12px; flex-wrap:wrap; font-size:13px; color:#374151;}
+    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;flex:1;min-width:220px;}
+    .bar{height:100%;width:0%;background:#111827;transition:width .2s ease;}
+    .mini{font-size:12px;color:#6b7280;margin-top:10px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 10px; border-radius:999px; background:#fff;
+      border:1px solid #e5e7eb; margin:6px 6px 0 0; font-size:12px;
+    }
+    .side h3{margin:0 0 10px 0; font-size:14px;}
+    .list{margin-top:10px; max-height:360px; overflow:auto; border:1px solid #e5e7eb; border-radius:14px; background:#fff;}
+    .item{padding:10px 12px; border-bottom:1px solid #f3f4f6;}
+    .item:last-child{border-bottom:none;}
+    .item .a{font-weight:900;}
+    .item .b{color:#6b7280;font-size:12px;margin-top:4px;}
+    .item .meta{margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;}
+    .tag.bad{border-color:#fecaca;background:#fee2e2;color:#991b1b;}
+    .tag.ok{border-color:#bbf7d0;background:#dcfce7;color:#166534;}
+    .divider{height:1px;background:#e5e7eb;margin:14px 0;}
+    textarea{
+      width:100%; height:110px; resize:vertical;
+      padding:10px 12px; border-radius:14px; border:1px solid #d1d5db;
+      font-size:13px; box-sizing:border-box; outline:none;
+    }
+
+    /* ⭐ 星星奖励 */
+    .rewardBox{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      padding:10px 12px; border-radius:16px;
+      background:#fff; border:1px solid #e5e7eb;
+    }
+    .stars{
+      font-size:18px; font-weight:900;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid #e5e7eb; background:#f9fafb; font-size:12px;
+    }
+    .toast{
+      position:fixed; left:50%; top:18px; transform:translateX(-50%);
+      background:#111827; color:#fff; padding:10px 14px;
+      border-radius:14px; box-shadow:0 12px 26px rgba(0,0,0,.18);
+      opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+      z-index:9999;
+    }
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(4px);}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="title">英语打字练习（30天 + 复习不熟练 + ⭐奖励）</div>
+        <div class="sub">朱哥哥，朱妹妹你们要努力学习！加油！爸爸爱你们！ ❤️</div>
+      </div>
+
+      <div class="controls">
+        <label class="soft">选择：</label>
+        <select id="modeSelect"></select>
+        <button id="prevBtn">上一条</button>
+        <button id="nextBtn">下一条</button>
+        <button id="speakBtn" class="primary">🔊 朗读</button>
+        <button id="markBtn">⭐ 加入复习</button>
+        <button id="resetBtn">重置当前列表</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Main -->
+      <div class="card">
+        <div class="rewardBox">
+          <div class="stars">⭐ 星星：<span id="starTotal">0</span></div>
+          <div class="badge">🔥 连击：<span id="streakEl">0</span></div>
+          <div class="badge">🎯 今日目标：<span id="goalEl">20</span> ⭐</div>
+          <button id="setGoalBtn">设置目标</button>
+          <button id="clearStarsBtn" class="warn">清空星星</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="en" id="enText">loading...</div>
+        <div class="cn" id="cnText"></div>
+
+        <input class="input" id="inputEl" placeholder="输入英文（忽略大小写/多空格/首尾空格）" autocomplete="off"/>
+
+        <div class="hint" id="hintEl"></div>
+
+        <div class="row">
+          <div class="stats">
+            <div>进度：<b id="posEl">0</b>/<b id="totalEl">0</b></div>
+            <div>正确：<b id="correctEl">0</b></div>
+            <div>错误：<b id="wrongEl">0</b></div>
+            <div>正确率：<b id="accEl">0%</b></div>
+          </div>
+          <div class="progress"><div class="bar" id="barEl"></div></div>
+        </div>
+
+        <div class="mini">
+          提示：按 <b>Enter</b> 提交；打对会自动下一条；错了会提示并记录。你也可以点 ⭐ 加入“复习不熟练”。  
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="font-weight:900;margin-bottom:8px;">➕ 自己添加内容（可选）</div>
+        <textarea id="customArea" placeholder="每行一条：英文=中文
+例如：
+apple=苹果
+I like coffee=我喜欢咖啡"></textarea>
+        <div class="controls" style="margin-top:10px;">
+          <button id="loadCustomBtn">加载到「自定义」</button>
+          <button id="clearCustomBtn" class="warn">清空自定义</button>
+          <button id="clearAllBtn" class="warn">清空所有记录</button>
+        </div>
+        <div class="mini">自定义内容加载后，会出现在选择列表里：<b>自定义</b>，也会进入复习池。</div>
+      </div>
+
+      <!-- Side -->
+      <div class="card side">
+        <h3>复习面板</h3>
+        <div>
+          <span class="pill">⭐ 标记不熟练：<b id="markCount">0</b></span>
+          <span class="pill">❌ 有错误记录：<b id="wrongCount">0</b></span>
+          <span class="pill">📌 当前模式：<b id="modeName">-</b></span>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>不熟练清单（当前选择）</h3>
+        <div class="list" id="reviewList"></div>
+
+        <div class="mini">
+          你可以选择：  
+          - <b>复习（当天不熟练）</b>：只练今天/当前列表里薄弱项  
+          - <b>复习（全局不熟练）</b>：复习所有天/所有列表薄弱项  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* =========================
+   A) 学习内容：30天 + 小学六年级（可继续扩展）
+   ========================= */
+const DAYS = {
+  "Day 1":[
+    {en:"hello",cn:"你好"},
+    {en:"thank you",cn:"谢谢"},
+    {en:"sorry",cn:"对不起"},
+    {en:"please",cn:"请"},
+    {en:"good morning",cn:"早上好"},
+    {en:"good night",cn:"晚安"},
+    {en:"see you",cn:"再见"},
+    {en:"yes",cn:"是"},
+    {en:"no",cn:"不"},
+    {en:"today",cn:"今天"},
+  ],
+  "Day 2":[
+    {en:"I",cn:"我"},
+    {en:"you",cn:"你"},
+    {en:"he",cn:"他"},
+    {en:"she",cn:"她"},
+    {en:"we",cn:"我们"},
+    {en:"they",cn:"他们"},
+    {en:"my",cn:"我的"},
+    {en:"your",cn:"你的"},
+    {en:"his",cn:"他的"},
+    {en:"her",cn:"她的"},
+  ],
+  "Day 3":[
+    {en:"eat",cn:"吃"},
+    {en:"drink",cn:"喝"},
+    {en:"go",cn:"去"},
+    {en:"come",cn:"来"},
+    {en:"like",cn:"喜欢"},
+    {en:"want",cn:"想要"},
+    {en:"need",cn:"需要"},
+    {en:"help",cn:"帮助"},
+    {en:"know",cn:"知道"},
+    {en:"think",cn:"想"},
+  ],
+  "Day 4":[
+    {en:"water",cn:"水"},
+    {en:"food",cn:"食物"},
+    {en:"coffee",cn:"咖啡"},
+    {en:"tea",cn:"茶"},
+    {en:"milk",cn:"牛奶"},
+    {en:"rice",cn:"米饭"},
+    {en:"bread",cn:"面包"},
+    {en:"fruit",cn:"水果"},
+    {en:"meat",cn:"肉"},
+    {en:"cake",cn:"蛋糕"},
+  ],
+  "Day 5":[
+    {en:"big",cn:"大"},
+    {en:"small",cn:"小"},
+    {en:"hot",cn:"热"},
+    {en:"cold",cn:"冷"},
+    {en:"new",cn:"新的"},
+    {en:"old",cn:"旧的"},
+    {en:"easy",cn:"容易"},
+    {en:"hard",cn:"难"},
+    {en:"fast",cn:"快"},
+    {en:"slow",cn:"慢"},
+  ],
+  "Day 6":[
+    {en:"I like coffee.",cn:"我喜欢咖啡。"},
+    {en:"I like tea.",cn:"我喜欢茶。"},
+    {en:"I want water.",cn:"我想要水。"},
+    {en:"I want food.",cn:"我想要食物。"},
+    {en:"I am happy.",cn:"我很开心。"},
+    {en:"I am tired.",cn:"我累了。"},
+    {en:"This is my phone.",cn:"这是我的手机。"},
+    {en:"This is my bag.",cn:"这是我的包。"},
+    {en:"I can do it.",cn:"我可以做到。"},
+    {en:"Please help me.",cn:"请帮帮我。"},
+  ],
+  "Day 7":[
+    {en:"How are you?",cn:"你好吗？"},
+    {en:"I am fine.",cn:"我很好。"},
+    {en:"Nice to meet you.",cn:"很高兴认识你。"},
+    {en:"What is this?",cn:"这是什么？"},
+    {en:"What is your name?",cn:"你叫什么名字？"},
+    {en:"Can you help me?",cn:"你能帮我吗？"},
+    {en:"No problem.",cn:"没问题。"},
+    {en:"Thank you very much.",cn:"非常感谢你。"},
+    {en:"See you tomorrow.",cn:"明天见。"},
+    {en:"Have a nice day.",cn:"祝你今天愉快。"},
+  ],
+  "Day 8":[
+    {en:"Where are you from?",cn:"你来自哪里？"},
+    {en:"I am from China.",cn:"我来自中国。"},
+    {en:"I am busy today.",cn:"我今天很忙。"},
+    {en:"I am free now.",cn:"我现在有空。"},
+    {en:"Let’s go.",cn:"我们走吧。"},
+    {en:"Take care.",cn:"保重。"},
+    {en:"Good luck.",cn:"祝你好运。"},
+    {en:"Please speak slowly.",cn:"请说慢一点。"},
+    {en:"Please repeat.",cn:"请再说一遍。"},
+    {en:"I understand.",cn:"我明白。"},
+  ],
+  "Day 9":[
+    {en:"How much is this?",cn:"这个多少钱？"},
+    {en:"It is cheap.",cn:"它很便宜。"},
+    {en:"It is expensive.",cn:"它很贵。"},
+    {en:"I like this one.",cn:"我喜欢这个。"},
+    {en:"I don’t like it.",cn:"我不喜欢它。"},
+    {en:"I will take it.",cn:"我买了。"},
+    {en:"Do you have a discount?",cn:"有折扣吗？"},
+    {en:"That’s fine.",cn:"可以。"},
+    {en:"Too much.",cn:"太贵了。"},
+    {en:"Thank you.",cn:"谢谢。"},
+  ],
+  "Day 10":[
+    {en:"I am learning English.",cn:"我在学英语。"},
+    {en:"English is hard.",cn:"英语很难。"},
+    {en:"English is easy.",cn:"英语很简单。"},
+    {en:"Don’t worry.",cn:"别担心。"},
+    {en:"I can try.",cn:"我可以试试。"},
+    {en:"I will keep going.",cn:"我会继续坚持。"},
+    {en:"I need practice.",cn:"我需要练习。"},
+    {en:"I practice every day.",cn:"我每天练习。"},
+    {en:"I am improving.",cn:"我在进步。"},
+    {en:"Tomorrow will be better.",cn:"明天会更好。"},
+  ],
+
+  // 为了让文件不爆炸：Day 11-30 用「实用句子/词」继续补齐（每一天10条）
+  "Day 11":[
+    {en:"Where is the bathroom?",cn:"洗手间在哪里？"},
+    {en:"Go straight.",cn:"直走。"},
+    {en:"Turn left.",cn:"左转。"},
+    {en:"Turn right.",cn:"右转。"},
+    {en:"It is near.",cn:"很近。"},
+    {en:"It is far.",cn:"很远。"},
+    {en:"I am on my way.",cn:"我在路上。"},
+    {en:"I am late.",cn:"我迟到了。"},
+    {en:"Wait a moment.",cn:"等一下。"},
+    {en:"Hurry up.",cn:"快点。"},
+  ],
+  "Day 12":[
+    {en:"What time is it?",cn:"现在几点？"},
+    {en:"It is eight o’clock.",cn:"八点了。"},
+    {en:"I get up early.",cn:"我起得很早。"},
+    {en:"I go to bed late.",cn:"我睡得很晚。"},
+    {en:"I have breakfast.",cn:"我吃早餐。"},
+    {en:"I have lunch.",cn:"我吃午饭。"},
+    {en:"I have dinner.",cn:"我吃晚饭。"},
+    {en:"I like reading.",cn:"我喜欢阅读。"},
+    {en:"I like music.",cn:"我喜欢音乐。"},
+    {en:"I like sports.",cn:"我喜欢运动。"},
+  ],
+  "Day 13":[
+    {en:"It is sunny today.",cn:"今天是晴天。"},
+    {en:"It is rainy.",cn:"下雨了。"},
+    {en:"It is cloudy.",cn:"多云。"},
+    {en:"It is windy.",cn:"有风。"},
+    {en:"It is hot.",cn:"很热。"},
+    {en:"It is cold.",cn:"很冷。"},
+    {en:"I feel happy.",cn:"我感到开心。"},
+    {en:"I feel tired.",cn:"我感到累。"},
+    {en:"I feel nervous.",cn:"我有点紧张。"},
+    {en:"I feel excited.",cn:"我很兴奋。"},
+  ],
+  "Day 14":[
+    {en:"Can I have water?",cn:"我可以要水吗？"},
+    {en:"Can I sit here?",cn:"我可以坐这里吗？"},
+    {en:"Please help me.",cn:"请帮帮我。"},
+    {en:"Excuse me.",cn:"打扰一下。"},
+    {en:"You are welcome.",cn:"不客气。"},
+    {en:"No, thanks.",cn:"不用了，谢谢。"},
+    {en:"Yes, please.",cn:"好的，请。"},
+    {en:"I am ready.",cn:"我准备好了。"},
+    {en:"Let’s start.",cn:"我们开始吧。"},
+    {en:"Good job!",cn:"做得好！"},
+  ],
+  "Day 15":[
+    {en:"I like green.",cn:"我喜欢绿色。"},
+    {en:"I like purple.",cn:"我喜欢紫色。"},
+    {en:"It is beautiful.",cn:"它很漂亮。"},
+    {en:"It looks good.",cn:"它看起来很好。"},
+    {en:"It is classic.",cn:"它很经典。"},
+    {en:"It is perfect.",cn:"它很完美。"},
+    {en:"I love it.",cn:"我爱它。"},
+    {en:"I don’t like it.",cn:"我不喜欢它。"},
+    {en:"This one is better.",cn:"这个更好。"},
+    {en:"That one is nice.",cn:"那个也不错。"},
+  ],
+  "Day 16":[
+    {en:"I like my school.",cn:"我喜欢我的学校。"},
+    {en:"I like my teacher.",cn:"我喜欢我的老师。"},
+    {en:"I like my friends.",cn:"我喜欢我的朋友。"},
+    {en:"We study together.",cn:"我们一起学习。"},
+    {en:"We play together.",cn:"我们一起玩。"},
+    {en:"I can read.",cn:"我会读。"},
+    {en:"I can write.",cn:"我会写。"},
+    {en:"I can speak.",cn:"我会说。"},
+    {en:"I can type.",cn:"我会打字。"},
+    {en:"I can learn.",cn:"我会学习。"},
+  ],
+  "Day 17":[
+    {en:"I go to school by bus.",cn:"我坐公交去上学。"},
+    {en:"I go by bike.",cn:"我骑车去。"},
+    {en:"I go by car.",cn:"我坐车去。"},
+    {en:"I walk to school.",cn:"我走路上学。"},
+    {en:"How do you go to school?",cn:"你怎么去上学？"},
+    {en:"I like English.",cn:"我喜欢英语。"},
+    {en:"I like math.",cn:"我喜欢数学。"},
+    {en:"I like science.",cn:"我喜欢科学。"},
+    {en:"English is useful.",cn:"英语很有用。"},
+    {en:"I will study hard.",cn:"我会努力学习。"},
+  ],
+  "Day 18":[
+    {en:"I have a question.",cn:"我有一个问题。"},
+    {en:"What is the answer?",cn:"答案是什么？"},
+    {en:"Please give me an example.",cn:"请给我一个例子。"},
+    {en:"I will try again.",cn:"我会再试一次。"},
+    {en:"I made a mistake.",cn:"我犯了一个错误。"},
+    {en:"It is okay.",cn:"没关系。"},
+    {en:"No worries.",cn:"别担心。"},
+    {en:"Keep going.",cn:"继续加油。"},
+    {en:"You can do it.",cn:"你可以做到。"},
+    {en:"Great!",cn:"太棒了！"},
+  ],
+  "Day 19":[
+    {en:"What do you like?",cn:"你喜欢什么？"},
+    {en:"I like reading books.",cn:"我喜欢看书。"},
+    {en:"I like drawing.",cn:"我喜欢画画。"},
+    {en:"I like playing football.",cn:"我喜欢踢足球。"},
+    {en:"I like swimming.",cn:"我喜欢游泳。"},
+    {en:"I like dancing.",cn:"我喜欢跳舞。"},
+    {en:"I like singing.",cn:"我喜欢唱歌。"},
+    {en:"I like running.",cn:"我喜欢跑步。"},
+    {en:"I like animals.",cn:"我喜欢动物。"},
+    {en:"I like nature.",cn:"我喜欢大自然。"},
+  ],
+  "Day 20":[
+    {en:"What day is it today?",cn:"今天星期几？"},
+    {en:"It is Monday.",cn:"星期一。"},
+    {en:"It is Tuesday.",cn:"星期二。"},
+    {en:"It is Wednesday.",cn:"星期三。"},
+    {en:"It is Thursday.",cn:"星期四。"},
+    {en:"It is Friday.",cn:"星期五。"},
+    {en:"It is Saturday.",cn:"星期六。"},
+    {en:"It is Sunday.",cn:"星期日。"},
+    {en:"See you next time.",cn:"下次见。"},
+    {en:"Good night.",cn:"晚安。"},
+  ],
+  "Day 21":[
+    {en:"I want to improve my English.",cn:"我想提高我的英语。"},
+    {en:"I read every day.",cn:"我每天阅读。"},
+    {en:"I listen every day.",cn:"我每天听。"},
+    {en:"I speak every day.",cn:"我每天说。"},
+    {en:"I practice every day.",cn:"我每天练习。"},
+    {en:"Practice makes perfect.",cn:"熟能生巧。"},
+    {en:"I will not give up.",cn:"我不会放弃。"},
+    {en:"I can do it.",cn:"我可以做到。"},
+    {en:"I am getting better.",cn:"我正在变得更好。"},
+    {en:"I feel proud.",cn:"我感到自豪。"},
+  ],
+  "Day 22":[
+    {en:"What do you want?",cn:"你想要什么？"},
+    {en:"I want some water.",cn:"我想要一些水。"},
+    {en:"I want some bread.",cn:"我想要一些面包。"},
+    {en:"I want some fruit.",cn:"我想要一些水果。"},
+    {en:"I want to rest.",cn:"我想休息。"},
+    {en:"I want to play.",cn:"我想玩。"},
+    {en:"I want to learn.",cn:"我想学习。"},
+    {en:"I want to help.",cn:"我想帮忙。"},
+    {en:"I want to try.",cn:"我想试试。"},
+    {en:"I want to win.",cn:"我想赢。"},
+  ],
+  "Day 23":[
+    {en:"I am hungry.",cn:"我饿了。"},
+    {en:"I am thirsty.",cn:"我渴了。"},
+    {en:"I need a break.",cn:"我需要休息。"},
+    {en:"Let’s eat.",cn:"我们吃吧。"},
+    {en:"Let’s drink water.",cn:"我们喝水吧。"},
+    {en:"Let’s go home.",cn:"我们回家吧。"},
+    {en:"Let’s go to the park.",cn:"我们去公园吧。"},
+    {en:"Let’s study now.",cn:"我们现在学习吧。"},
+    {en:"Let’s do homework.",cn:"我们写作业吧。"},
+    {en:"Let’s sleep.",cn:"我们睡吧。"},
+  ],
+  "Day 24":[
+    {en:"I have time.",cn:"我有时间。"},
+    {en:"I have no time.",cn:"我没时间。"},
+    {en:"I am early.",cn:"我来早了。"},
+    {en:"I am late.",cn:"我迟到了。"},
+    {en:"I am ready.",cn:"我准备好了。"},
+    {en:"I am busy.",cn:"我很忙。"},
+    {en:"I am free.",cn:"我有空。"},
+    {en:"I am happy.",cn:"我很开心。"},
+    {en:"I am sad.",cn:"我有点难过。"},
+    {en:"I am okay.",cn:"我没事。"},
+  ],
+  "Day 25":[
+    {en:"I like this one.",cn:"我喜欢这个。"},
+    {en:"I want this one.",cn:"我想要这个。"},
+    {en:"How much is it?",cn:"它多少钱？"},
+    {en:"That is cheap.",cn:"那很便宜。"},
+    {en:"That is expensive.",cn:"那很贵。"},
+    {en:"Do you have a discount?",cn:"有折扣吗？"},
+    {en:"I will take it.",cn:"我买了。"},
+    {en:"Thank you for your help.",cn:"谢谢你的帮助。"},
+    {en:"Have a nice day.",cn:"祝你今天愉快。"},
+    {en:"See you tomorrow.",cn:"明天见。"},
+  ],
+  "Day 26":[
+    {en:"I like to learn.",cn:"我喜欢学习。"},
+    {en:"I like to practice.",cn:"我喜欢练习。"},
+    {en:"I need practice.",cn:"我需要练习。"},
+    {en:"I will keep practicing.",cn:"我会继续练习。"},
+    {en:"I will try my best.",cn:"我会尽力。"},
+    {en:"I will study hard.",cn:"我会努力学习。"},
+    {en:"I will be better.",cn:"我会更好。"},
+    {en:"I will not stop.",cn:"我不会停。"},
+    {en:"I will not give up.",cn:"我不会放弃。"},
+    {en:"I will win.",cn:"我会赢。"},
+  ],
+  "Day 27":[
+    {en:"I live here.",cn:"我住在这里。"},
+    {en:"I go home.",cn:"我回家。"},
+    {en:"I go to work.",cn:"我去上班。"},
+    {en:"I go to school.",cn:"我去上学。"},
+    {en:"I like my home.",cn:"我喜欢我家。"},
+    {en:"I like my city.",cn:"我喜欢我的城市。"},
+    {en:"I like my life.",cn:"我喜欢我的生活。"},
+    {en:"I like my job.",cn:"我喜欢我的工作。"},
+    {en:"I like my family.",cn:"我爱我的家人。"},
+    {en:"I love you.",cn:"我爱你。"},
+  ],
+  "Day 28":[
+    {en:"Today is a good day.",cn:"今天是美好的一天。"},
+    {en:"Tomorrow will be better.",cn:"明天会更好。"},
+    {en:"I can do it.",cn:"我可以做到。"},
+    {en:"I will keep going.",cn:"我会继续坚持。"},
+    {en:"I will keep practicing.",cn:"我会继续练习。"},
+    {en:"Good luck!",cn:"祝你好运！"},
+    {en:"Great job!",cn:"做得好！"},
+    {en:"Well done!",cn:"干得漂亮！"},
+    {en:"Keep it up!",cn:"继续保持！"},
+    {en:"You are the best!",cn:"你最棒！"},
+  ],
+  "Day 29":[
+    {en:"What is your name?",cn:"你叫什么名字？"},
+    {en:"My name is Lily.",cn:"我叫莉莉。"},
+    {en:"How old are you?",cn:"你多大了？"},
+    {en:"I am twelve years old.",cn:"我十二岁。"},
+    {en:"What do you like?",cn:"你喜欢什么？"},
+    {en:"I like reading books.",cn:"我喜欢看书。"},
+    {en:"What time is it?",cn:"现在几点？"},
+    {en:"It is eight o’clock.",cn:"八点了。"},
+    {en:"Nice to meet you.",cn:"很高兴认识你。"},
+    {en:"See you later.",cn:"回头见。"},
+  ],
+  "Day 30":[
+    {en:"I can do it.",cn:"我可以做到。"},
+    {en:"I will keep practicing.",cn:"我会继续练习。"},
+    {en:"Tomorrow will be better.",cn:"明天会更好。"},
+    {en:"I will not give up.",cn:"我不会放弃。"},
+    {en:"Practice makes perfect.",cn:"熟能生巧。"},
+    {en:"I am improving.",cn:"我在进步。"},
+    {en:"I feel proud.",cn:"我感到自豪。"},
+    {en:"Thank you for your help.",cn:"谢谢你的帮助。"},
+    {en:"Good luck!",cn:"祝你好运！"},
+    {en:"Great job!",cn:"做得好！"},
+  ],
+
+  "小学六年级":[
+    // 词汇（常用）
+    {en:"apple",cn:"苹果"},
+    {en:"banana",cn:"香蕉"},
+    {en:"book",cn:"书"},
+    {en:"teacher",cn:"老师"},
+    {en:"student",cn:"学生"},
+    {en:"family",cn:"家庭"},
+    {en:"school",cn:"学校"},
+    {en:"homework",cn:"作业"},
+    {en:"computer",cn:"电脑"},
+    {en:"internet",cn:"互联网"},
+    {en:"holiday",cn:"假期"},
+    {en:"travel",cn:"旅行"},
+    {en:"future",cn:"未来"},
+    {en:"important",cn:"重要的"},
+    {en:"different",cn:"不同的"},
+    {en:"problem",cn:"问题"},
+    {en:"answer",cn:"答案"},
+    {en:"example",cn:"例子"},
+    {en:"remember",cn:"记住"},
+    {en:"improve",cn:"提高"},
+
+    // 句子（六年级常用表达）
+    {en:"I want to improve my English.",cn:"我想提高我的英语。"},
+    {en:"It is important to read every day.",cn:"每天阅读很重要。"},
+    {en:"We are different but we can be friends.",cn:"我们不同但可以做朋友。"},
+    {en:"When I have a problem, I ask for help.",cn:"当我有问题时我会求助。"},
+    {en:"Please give me an example.",cn:"请给我一个例子。"},
+    {en:"I want to be a doctor in the future.",cn:"我将来想当医生。"},
+    {en:"I do my homework after school.",cn:"放学后我做作业。"},
+    {en:"I go to school by bus.",cn:"我坐公交去上学。"},
+    {en:"Practice makes perfect.",cn:"熟能生巧。"},
+    {en:"I will try my best.",cn:"我会尽力。"},
+  ],
+
+  "自定义":[]
+};
+
+/* =========================
+   B) 存储：复习记录 + 星星
+   ========================= */
+const LS_KEY = "ETP_APP_V2";
+function loadState(){
+  try{
+    return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+  }catch(e){ return {}; }
+}
+function saveState(s){
+  localStorage.setItem(LS_KEY, JSON.stringify(s));
+}
+
+// state schema
+// {
+//   items: { "Day 1::hello": {star:true, wrong:1, right:2, lastAt:...}, ... },
+//   starsTotal: number,
+//   streak: number,
+//   goal: number,
+//   todayKey: "YYYY-MM-DD",
+//   todayStars: number
+// }
+function ensureState(){
+  const s = loadState();
+  if(!s.items) s.items = {};
+  if(typeof s.starsTotal !== "number") s.starsTotal = 0;
+  if(typeof s.streak !== "number") s.streak = 0;
+  if(typeof s.goal !== "number") s.goal = 20;
+  if(typeof s.todayStars !== "number") s.todayStars = 0;
+
+  const today = new Date();
+  const k = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+  if(s.todayKey !== k){
+    s.todayKey = k;
+    s.todayStars = 0;
+    s.streak = 0; // 新的一天连击清零（也可以不清，你想怎样都行）
+  }
+
+  saveState(s);
+  return s;
+}
+
+let APP = ensureState();
+
+function normalize(s){
+  return (s || "").trim().replace(/\s+/g, " ").toLowerCase();
+}
+function itemKey(day, en){
+  return `${day}::${en}`;
+}
+function getRec(day, en){
+  const k = itemKey(day, en);
+  if(!APP.items[k]){
+    APP.items[k] = { star:false, wrong:0, right:0, lastAt:0 };
+  }
+  return APP.items[k];
+}
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1400);
+}
+
+/* =========================
+   C) UI + 模式
+   ========================= */
+const modeSelect = document.getElementById("modeSelect");
+const enText = document.getElementById("enText");
+const cnText = document.getElementById("cnText");
+const inputEl = document.getElementById("inputEl");
+const hintEl = document.getElementById("hintEl");
+
+const posEl = document.getElementById("posEl");
+const totalEl = document.getElementById("totalEl");
+const correctEl = document.getElementById("correctEl");
+const wrongEl = document.getElementById("wrongEl");
+const accEl = document.getElementById("accEl");
+const barEl = document.getElementById("barEl");
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const speakBtn = document.getElementById("speakBtn");
+const markBtn = document.getElementById("markBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+const customArea = document.getElementById("customArea");
+const loadCustomBtn = document.getElementById("loadCustomBtn");
+const clearCustomBtn = document.getElementById("clearCustomBtn");
+const clearAllBtn = document.getElementById("clearAllBtn");
+
+const markCount = document.getElementById("markCount");
+const wrongCount = document.getElementById("wrongCount");
+const modeName = document.getElementById("modeName");
+const reviewList = document.getElementById("reviewList");
+
+const starTotal = document.getElementById("starTotal");
+const streakEl = document.getElementById("streakEl");
+const goalEl = document.getElementById("goalEl");
+const setGoalBtn = document.getElementById("setGoalBtn");
+const clearStarsBtn = document.getElementById("clearStarsBtn");
+
+// app run state
+let currentMode = "Day 1";
+let currentDayForReview = "Day 1";
+let activeList = []; // {day,en,cn}
+let pos = 0;
+
+let correct = 0;
+let wrong = 0;
+
+function rebuildModeSelect(){
+  modeSelect.innerHTML = "";
+
+  Object.keys(DAYS).forEach(k=>{
+    const opt = document.createElement("option");
+    opt.value = k;
+    opt.textContent = k;
+    modeSelect.appendChild(opt);
+  });
+
+  const opt1 = document.createElement("option");
+  opt1.value = "__review_day__";
+  opt1.textContent = "复习（当天不熟练）";
+  modeSelect.appendChild(opt1);
+
+  const opt2 = document.createElement("option");
+  opt2.value = "__review_all__";
+  opt2.textContent = "复习（全局不熟练）";
+  modeSelect.appendChild(opt2);
+}
+
+function buildReview(scope, day){
+  const out = [];
+  const keys = (scope==="day") ? [day] : Object.keys(DAYS);
+
+  keys.forEach(d=>{
+    (DAYS[d]||[]).forEach(it=>{
+      const r = getRec(d, it.en);
+      if(r.star || r.wrong>0){
+        out.push({day:d, en:it.en, cn:it.cn});
+      }
+    });
+  });
+
+  // sort: wrong desc, star first
+  out.sort((a,b)=>{
+    const ra = getRec(a.day, a.en);
+    const rb = getRec(b.day, b.en);
+    if(rb.wrong !== ra.wrong) return rb.wrong - ra.wrong;
+    if((rb.star?1:0) !== (ra.star?1:0)) return (rb.star?1:0) - (ra.star?1:0);
+    return a.en.localeCompare(b.en);
+  });
+
+  return out;
+}
+
+function buildActiveList(){
+  if(currentMode === "__review_day__"){
+    activeList = buildReview("day", currentDayForReview);
+  }else if(currentMode === "__review_all__"){
+    activeList = buildReview("all");
+  }else{
+    currentDayForReview = currentMode;
+    activeList = (DAYS[currentMode]||[]).map(x=>({day:currentMode, en:x.en, cn:x.cn}));
+  }
+}
+
+function updateStatsUI(){
+  correctEl.textContent = String(correct);
+  wrongEl.textContent = String(wrong);
+  const total = correct + wrong;
+  const acc = total===0 ? 0 : Math.round(correct/total*100);
+  accEl.textContent = acc + "%";
+}
+
+function updateProgressUI(){
+  const total = activeList.length;
+  totalEl.textContent = String(total);
+  posEl.textContent = total===0 ? "0" : String(Math.min(pos+1,total));
+  const pct = total===0 ? 0 : Math.round((pos/Math.max(1,total))*100);
+  barEl.style.width = pct + "%";
+}
+
+function updateRewardUI(){
+  starTotal.textContent = String(APP.starsTotal);
+  streakEl.textContent = String(APP.streak);
+  goalEl.textContent = String(APP.goal);
+}
+
+function updateSidePanel(){
+  let mc = 0, wc = 0;
+  Object.values(APP.items).forEach(v=>{
+    if(v.star) mc++;
+    if(v.wrong>0) wc++;
+  });
+  markCount.textContent = String(mc);
+  wrongCount.textContent = String(wc);
+
+  let name = currentMode;
+  if(currentMode==="__review_day__") name = `复习（当天不熟练：${currentDayForReview}）`;
+  if(currentMode==="__review_all__") name = "复习（全局不熟练）";
+  modeName.textContent = name;
+
+  // list shown: day review unless all-review
+  const listToShow = (currentMode==="__review_all__")
+    ? buildReview("all")
+    : buildReview("day", currentDayForReview);
+
+  reviewList.innerHTML = "";
+  if(listToShow.length===0){
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `<div class="a">暂无不熟练内容</div><div class="b">做错或点 ⭐ 后，会自动出现在这里</div>`;
+    reviewList.appendChild(div);
+    return;
+  }
+
+  listToShow.slice(0,80).forEach(it=>{
+    const r = getRec(it.day, it.en);
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <div class="a">${it.en}</div>
+      <div class="b">${it.cn} <span class="soft">（${it.day}）</span></div>
+      <div class="meta">
+        <span class="tag ${r.star ? "ok" : ""}">${r.star ? "⭐已标记" : "未标记"}</span>
+        <span class="tag ${r.wrong>0 ? "bad" : ""}">❌错误 ${r.wrong}</span>
+        <span class="tag">✅正确 ${r.right||0}</span>
+      </div>
+    `;
+    reviewList.appendChild(div);
+  });
+}
+
+function currentItem(){
+  if(activeList.length===0) return null;
+  return activeList[pos];
+}
+
+function render(){
+  buildActiveList();
+  pos = 0;
+  correct = 0;
+  wrong = 0;
+
+  updateRewardUI();
+  updateStatsUI();
+  updateSidePanel();
+
+  if(activeList.length===0){
+    enText.textContent = "（没有内容）";
+    cnText.textContent = "这个列表为空：先练习并做错/标记一些，再进入复习。";
+    inputEl.value = "";
+    inputEl.disabled = true;
+    hintEl.innerHTML = `<span class="soft">切换到 Day 或 小学六年级 开始练习。</span>`;
+    updateProgressUI();
+    markBtn.disabled = true;
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    return;
+  }
+
+  inputEl.disabled = false;
+  markBtn.disabled = false;
+  prevBtn.disabled = false;
+  nextBtn.disabled = false;
+
+  const it = currentItem();
+  enText.textContent = it.en;
+  cnText.textContent = it.cn;
+  inputEl.value = "";
+  hintEl.innerHTML = `<span class="soft">开始输入英文…（忽略大小写/多空格）</span>`;
+  updateProgressUI();
+  inputEl.focus();
+
+  const r = getRec(it.day, it.en);
+  markBtn.textContent = r.star ? "⭐ 已加入复习（点取消）" : "⭐ 加入复习";
+}
+
+function goNext(){
+  if(activeList.length===0) return;
+  if(pos < activeList.length-1){
+    pos++;
+    const it = currentItem();
+    enText.textContent = it.en;
+    cnText.textContent = it.cn;
+    inputEl.value = "";
+    hintEl.innerHTML = `<span class="soft">开始输入英文…</span>`;
+    updateProgressUI();
+    inputEl.focus();
+
+    const r = getRec(it.day, it.en);
+    markBtn.textContent = r.star ? "⭐ 已加入复习（点取消）" : "⭐ 加入复习";
+  }else{
+    enText.textContent = "🎉 完成！";
+    cnText.textContent = "本列表已练完。可以切换天数或进入复习。";
+    hintEl.innerHTML = `<span class="ok">完成！</span> <span class="soft">去复习巩固薄弱项吧。</span>`;
+    inputEl.value = "";
+    inputEl.disabled = true;
+    barEl.style.width = "100%";
+  }
+}
+
+function goPrev(){
+  if(activeList.length===0) return;
+  if(pos > 0){
+    pos--;
+    const it = currentItem();
+    enText.textContent = it.en;
+    cnText.textContent = it.cn;
+    inputEl.value = "";
+    hintEl.innerHTML = `<span class="soft">开始输入英文…</span>`;
+    updateProgressUI();
+    inputEl.focus();
+
+    const r = getRec(it.day, it.en);
+    markBtn.textContent = r.star ? "⭐ 已加入复习（点取消）" : "⭐ 加入复习";
+  }
+}
+
+function speak(){
+  const it = currentItem();
+  if(!it) return;
+  if(!("speechSynthesis" in window)){
+    alert("你的浏览器不支持朗读，请用 Chrome/Edge。");
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(it.en);
+  u.lang = "en-US";
+  u.rate = 0.95;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+function toggleStar(){
+  const it = currentItem();
+  if(!it) return;
+  const r = getRec(it.day, it.en);
+  r.star = !r.star;
+  r.lastAt = Date.now();
+  saveState(APP);
+
+  markBtn.textContent = r.star ? "⭐ 已加入复习（点取消）" : "⭐ 加入复习";
+  updateSidePanel();
+  toast(r.star ? "已加入复习 ⭐" : "已取消标记");
+}
+
+function resetCurrent(){
+  correct = 0; wrong = 0; pos = 0;
+  inputEl.disabled = false;
+  render();
+}
+
+function clearAllRecords(){
+  if(!confirm("确定清空所有记录（星标/错误次数/正确次数）吗？")) return;
+  APP.items = {};
+  saveState(APP);
+  render();
+}
+
+function addStars(amount){
+  APP.starsTotal += amount;
+  APP.todayStars += amount;
+  saveState(APP);
+  updateRewardUI();
+
+  // 达成目标
+  if(APP.todayStars >= APP.goal){
+    toast(`🎉 达成目标！今天已获得 ${APP.todayStars} ⭐`);
+  }
+}
+
+function onCorrect(){
+  // 星星奖励：基础1，连击加成（最多+3）
+  APP.streak = Math.min(10, (APP.streak||0) + 1);
+  const bonus = Math.min(3, Math.floor(APP.streak/3)); // 0~3
+  const gain = 1 + bonus;
+  addStars(gain);
+
+  if(gain >= 3) toast(`🔥 连击 ${APP.streak}！+${gain}⭐`);
+}
+
+function onWrong(){
+  APP.streak = 0; // 错了连击清零
+  saveState(APP);
+  updateRewardUI();
+}
+
+setGoalBtn.addEventListener("click", ()=>{
+  const v = prompt("设置今日目标（星星数）", String(APP.goal));
+  if(v===null) return;
+  const n = parseInt(v, 10);
+  if(!Number.isFinite(n) || n<=0){
+    alert("请输入大于0的数字");
+    return;
+  }
+  APP.goal = n;
+  saveState(APP);
+  updateRewardUI();
+  toast(`今日目标已设为 ${n} ⭐`);
+});
+
+clearStarsBtn.addEventListener("click", ()=>{
+  if(!confirm("确定清空星星吗？（总星星会归零）")) return;
+  APP.starsTotal = 0;
+  APP.todayStars = 0;
+  APP.streak = 0;
+  saveState(APP);
+  updateRewardUI();
+  toast("已清空星星");
+});
+
+/* =========================
+   输入判断（实时）+ Enter 提交（记录错误）
+   ========================= */
+inputEl.addEventListener("input", ()=>{
+  const it = currentItem();
+  if(!it) return;
+
+  const target = normalize(it.en);
+  const typed = normalize(inputEl.value);
+
+  if(typed.length === 0){
+    hintEl.innerHTML = `<span class="soft">开始输入英文…</span>`;
+    return;
+  }
+
+  if(typed === target){
+    hintEl.innerHTML = `<span class="ok">✔ 正确！</span> <span class="soft">0.5秒后下一条</span>`;
+    correct++;
+    updateStatsUI();
+
+    const r = getRec(it.day, it.en);
+    r.right = (r.right||0) + 1;
+    r.lastAt = Date.now();
+    saveState(APP);
+
+    onCorrect();
+    updateSidePanel();
+
+    setTimeout(()=>{
+      if(inputEl.disabled) return;
+      goNext();
+      updateProgressUI();
+    }, 500);
+  }else{
+    hintEl.innerHTML = `<span class="bad">✖ 继续输入…</span> <span class="soft">（拼写/少字/多字）</span>`;
+  }
+});
+
+inputEl.addEventListener("keydown",(e)=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    const it = currentItem();
+    if(!it) return;
+
+    const target = normalize(it.en);
+    const typed = normalize(inputEl.value);
+
+    if(typed !== target){
+      wrong++;
+      updateStatsUI();
+
+      const r = getRec(it.day, it.en);
+      r.wrong = (r.wrong||0) + 1;
+      r.lastAt = Date.now();
+      saveState(APP);
+
+      onWrong();
+      updateSidePanel();
+
+      hintEl.innerHTML = `<span class="bad">✖ 不对哦</span> <span class="soft">（已记录错误次数，建议点 ⭐ 加入复习）</span>`;
+      toast("已记录错误 ❌");
+    }
+  }
+});
+
+/* =========================
+   自定义内容
+   ========================= */
+loadCustomBtn.addEventListener("click", ()=>{
+  const lines = customArea.value.split("\n").map(l=>l.trim()).filter(Boolean);
+  const arr = [];
+  for(const line of lines){
+    const parts = line.split("=");
+    if(parts.length < 2) continue;
+    const en = parts[0].trim();
+    const cn = parts.slice(1).join("=").trim();
+    if(en && cn) arr.push({en, cn});
+  }
+  DAYS["自定义"] = arr;
+
+  rebuildModeSelect();
+  currentMode = "自定义";
+  modeSelect.value = "自定义";
+  currentDayForReview = "自定义";
+  render();
+  toast("已加载自定义内容 ✅");
+});
+
+clearCustomBtn.addEventListener("click", ()=>{
+  if(!confirm("确定清空自定义内容吗？")) return;
+  customArea.value = "";
+  DAYS["自定义"] = [];
+  rebuildModeSelect();
+  if(currentMode === "自定义") render();
+  toast("已清空自定义");
+});
+
+/* =========================
+   mode change + buttons
+   ========================= */
+modeSelect.addEventListener("change", ()=>{
+  currentMode = modeSelect.value;
+  render();
+});
+
+prevBtn.addEventListener("click", goPrev);
+nextBtn.addEventListener("click", goNext);
+speakBtn.addEventListener("click", speak);
+markBtn.addEventListener("click", toggleStar);
+resetBtn.addEventListener("click", resetCurrent);
+clearAllBtn.addEventListener("click", clearAllRecords);
+
+/* =========================
+   init
+   ========================= */
+function init(){
+  rebuildModeSelect();
+  if(!DAYS[currentMode]) currentMode = "Day 1";
+  modeSelect.value = currentMode;
+  render();
+}
+init();
+</script>
+</body>
+</html>
